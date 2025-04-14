@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "games", uniqueConstraints = @UniqueConstraint(columnNames = "name"))
-public class GameModel {
+public class Game {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
