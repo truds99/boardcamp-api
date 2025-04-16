@@ -1,0 +1,36 @@
+package com.boardcamp.api.controllers;
+
+import com.boardcamp.api.models.Rental;
+import com.boardcamp.api.services.RentalService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/rentals")
+public class RentalController {
+
+    private final RentalService rentalService;
+
+    public RentalController(RentalService rentalService) {
+        this.rentalService = rentalService;
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Rental>> getAllRentals() {
+        return ResponseEntity.ok(rentalService.listRentals());
+    }
+
+    @PostMapping
+    public ResponseEntity<Rental> createRental(@RequestBody Rental rental) {
+        try {
+            Rental created = rentalService.createRental(rental);
+            return ResponseEntity.status(201).body(created);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.unprocessableEntity().build(); 
+        }
+    }
+}
