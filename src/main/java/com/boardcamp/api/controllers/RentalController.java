@@ -1,5 +1,6 @@
 package com.boardcamp.api.controllers;
 
+import com.boardcamp.api.exceptions.NoStockAvailableException;
 import com.boardcamp.api.models.Rental;
 import com.boardcamp.api.services.RentalService;
 import org.springframework.http.ResponseEntity;
@@ -29,9 +30,13 @@ public class RentalController {
             return ResponseEntity.status(201).body(created);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.unprocessableEntity().build(); 
+        } catch (NoStockAvailableException e) {
+            return ResponseEntity.unprocessableEntity().build();
         }
+        catch (RuntimeException e) {
+            return ResponseEntity.status(404).build();
+        }
+        
     }
 
     @PostMapping("/{id}/return")

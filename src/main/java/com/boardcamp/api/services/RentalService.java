@@ -1,5 +1,6 @@
 package com.boardcamp.api.services;
 
+import com.boardcamp.api.exceptions.NoStockAvailableException;
 import com.boardcamp.api.models.Customer;
 import com.boardcamp.api.models.Game;
 import com.boardcamp.api.models.Rental;
@@ -51,7 +52,7 @@ public class RentalService {
                 .findByGameIdAndReturnDateIsNull(rental.getGameId()).size();
 
         if (openRentals >= game.getStockTotal()) {
-            throw new RuntimeException("No stock available.");
+            throw new NoStockAvailableException("No stock available.");
         }
 
         Rental newRental = new Rental();
