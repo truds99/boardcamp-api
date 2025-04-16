@@ -33,4 +33,30 @@ public class RentalController {
             return ResponseEntity.unprocessableEntity().build(); 
         }
     }
+
+    @PostMapping("/{id}/return")
+    public ResponseEntity<Rental> returnRental(@PathVariable Long id) {
+        try {
+            Rental finished = rentalService.finishRental(id);
+            return ResponseEntity.ok(finished);
+        } catch (IllegalStateException e) {
+            return ResponseEntity.unprocessableEntity().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(404).build();
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteRental(@PathVariable Long id) {
+        try {
+            rentalService.deleteRental(id);
+            return ResponseEntity.ok().build();
+        } catch (IllegalStateException e) {
+            return ResponseEntity.badRequest().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(404).build();
+        } 
+    }
+
+
 }

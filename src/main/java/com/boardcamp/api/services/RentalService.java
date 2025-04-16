@@ -65,4 +65,41 @@ public class RentalService {
 
         return rentalRepository.save(newRental);
     }
+
+    public Rental finishRental(Long id) {
+        Rental rental = rentalRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Rental not found"));
+    
+        if (rental.getReturnDate() != null) {
+            throw new IllegalStateException("Rental already finished");
+        }
+    
+        LocalDate today = LocalDate.now();
+        LocalDate expectedReturnDate = rental.getRentDate().plusDays(rental.getDaysRented());
+    
+        int delayDays = today.isAfter(expectedReturnDate)
+            ? (int) expectedReturnDate.until(today).getDays()
+            : 0;
+    
+        int delayFee = delayDays * (rental.getOriginalPrice() / rental.getDaysRented());
+    
+        rental.setReturnDate(today);
+        rental.setDelayFee(delayFee);
+    
+        return rentalRepository.save(rental);
+    }
+
+    public void deleteRental(Long id) {
+        Rental rental = rentalRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Rental not found"));
+    
+        if (rental.getReturnDate() == null) {
+            throw new IllegalStateException("Cannot delete rental not yet finished");
+        }
+    
+        rentalRepository.delete(rental);
+    }
+    
+    
 }
+
