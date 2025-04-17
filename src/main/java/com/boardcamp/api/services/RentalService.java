@@ -1,5 +1,6 @@
 package com.boardcamp.api.services;
 
+import com.boardcamp.api.dtos.RentalResponseDTO;
 import com.boardcamp.api.exceptions.NoStockAvailableException;
 import com.boardcamp.api.models.Customer;
 import com.boardcamp.api.models.Game;
@@ -29,9 +30,15 @@ public class RentalService {
         this.gameRepository = gameRepository;
     }
 
-    public List<Rental> listRentals() {
-        return rentalRepository.findAll();
-    }
+    public List<RentalResponseDTO> listRentals() {
+    List<Rental> rentals = rentalRepository.findAll();
+
+    return rentals.stream().map(rental -> {
+        Customer customer = customerRepository.findById(rental.getCustomerId()).orElse(null);
+        Game game = gameRepository.findById(rental.getGameId()).orElse(null);
+        return new RentalResponseDTO(rental, customer, game);
+    }).toList();
+}
 
     public Rental createRental(Rental rental) {
         if (rental.getDaysRented() == null || rental.getDaysRented() <= 0) {

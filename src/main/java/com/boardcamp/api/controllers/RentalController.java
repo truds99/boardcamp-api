@@ -1,5 +1,6 @@
 package com.boardcamp.api.controllers;
 
+import com.boardcamp.api.dtos.RentalResponseDTO;
 import com.boardcamp.api.exceptions.NoStockAvailableException;
 import com.boardcamp.api.models.Rental;
 import com.boardcamp.api.services.RentalService;
@@ -19,7 +20,7 @@ public class RentalController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Rental>> getAllRentals() {
+    public ResponseEntity<List<RentalResponseDTO>> getAllRentals() {
         return ResponseEntity.ok(rentalService.listRentals());
     }
 
