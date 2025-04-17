@@ -30,10 +30,9 @@ public class GamesController {
             Game createdGame = gamesService.createGame(game);
             return ResponseEntity.status(201).body(createdGame);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().build(); // 400
         } catch (GameAlreadyExistsException e) {
-            return ResponseEntity.status(409).build();
+            return ResponseEntity.status(409).build(); // 409
         }
     }
 }
-
