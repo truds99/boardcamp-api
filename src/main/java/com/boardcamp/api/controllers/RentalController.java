@@ -1,6 +1,5 @@
 package com.boardcamp.api.controllers;
 
-import com.boardcamp.api.dtos.RentalResponseDTO;
 import com.boardcamp.api.exceptions.NoStockAvailableException;
 import com.boardcamp.api.models.Rental;
 import com.boardcamp.api.services.RentalService;
@@ -17,11 +16,6 @@ public class RentalController {
 
     public RentalController(RentalService rentalService) {
         this.rentalService = rentalService;
-    }
-
-    @GetMapping
-    public ResponseEntity<List<RentalResponseDTO>> getAllRentals() {
-        return ResponseEntity.ok(rentalService.listRentals());
     }
 
     @PostMapping
@@ -41,14 +35,14 @@ public class RentalController {
     }
 
     @PostMapping("/{id}/return")
-    public ResponseEntity<Rental> returnRental(@PathVariable Long id) {
+    public ResponseEntity<Rental> finishRental(@PathVariable Long id) {
         try {
             Rental finished = rentalService.finishRental(id);
             return ResponseEntity.ok(finished);
         } catch (IllegalStateException e) {
             return ResponseEntity.unprocessableEntity().build();
         } catch (RuntimeException e) {
-            return ResponseEntity.status(404).build();
+            return ResponseEntity.notFound().build(); 
         }
     }
 
@@ -62,6 +56,12 @@ public class RentalController {
         } catch (RuntimeException e) {
             return ResponseEntity.status(404).build();
         } 
+    }
+
+    @GetMapping
+    public ResponseEntity<List<?>> getRentals() {
+        List<?> rentals = rentalService.listRentals();
+        return ResponseEntity.ok(rentals);
     }
 
 

@@ -132,7 +132,7 @@ class RentalServiceTest {
     void shouldDeleteRentalSuccessfully() {
         Rental rental = new Rental();
         rental.setId(1L);
-        rental.setReturnDate(LocalDate.now()); // já finalizado
+        rental.setReturnDate(LocalDate.now()); 
 
         when(rentalRepository.findById(1L)).thenReturn(Optional.of(rental));
 

@@ -37,7 +37,8 @@ public class CustomerService {
         }
 
         if (customerRepository.findByCpf(customer.getCpf()).isPresent()) {
-            throw new RuntimeException("CPF already exists.");
+            throw new IllegalArgumentException("CPF already exists.");
+
         }
 
         return customerRepository.save(customer);
